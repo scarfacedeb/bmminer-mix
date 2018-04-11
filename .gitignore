@@ -1,1 +1,4 @@
 /bmminer
+*.o
+*.log
+.vagrant

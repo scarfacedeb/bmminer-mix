@@ -1190,9 +1190,9 @@ static char *set_extranonce_subscribe(char *arg)
 
 static char *enable_debug(bool *flag)
 {
-    *flag = false;
+    *flag = true;
     /* Turn on verbose output, too. */
-    opt_log_output = false;
+    opt_log_output = true;
     return NULL;
 }
 
@@ -11705,6 +11705,7 @@ int main(int argc, char *argv[])
 #endif
 
     applog(LOG_WARNING, "Started %s", packagename);
+
     if (cnfbuf)
     {
         applog(LOG_NOTICE, "Loaded configuration file %s", cnfbuf);
@@ -11813,6 +11814,10 @@ int main(int argc, char *argv[])
         early_quit(1, "All devices disabled, cannot mint!");
     }
 #endif
+
+    printf("DISABLING 0 DEVICE MANUALLY!\n");
+    null_device_drv(devices[0]->drv);
+    devices[0]->deven = DEV_DISABLED;
 
     most_devices = total_devices;
 

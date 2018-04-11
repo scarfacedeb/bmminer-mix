@@ -60,12 +60,16 @@ XILINX_LIBDIR = $(USR)/lib
 
 # The pre-processor and compiler options.
 # MY_CFLAGS = -ggdb3 -pipe -O2 -Wall -Wextra -fopenmp -march=native -mfpmath=sse -DLINUX -m64 -std=c++0x
-MY_CFLAGS = -O2 -pthread -I$(XILINX_INC) -L$(XILINX_LIBDIR) -I./ -I./ccan/opt -I./compat/jansson-2.6/src -I./lib -I$(XILINX_OTHER_LIB_BASE_PATH)/include
+# MY_CFLAGS = -O2 -pthread -I$(XILINX_INC) -L$(XILINX_LIBDIR) -I./ -I./ccan/opt -I./compat/jansson-2.6/src -I./lib -I$(XILINX_OTHER_LIB_BASE_PATH)/include
 #-Itest1/include -Itest2/include -Itest1/include/test1 -Itest2/include/test2
+
+MY_CFLAGS = -O2 -pthread -I./ -I./ccan/opt -I./compat/jansson-2.6/src -I./lib
+
 
 # The linker options.
 # MY_LIBS   = -lGLEW -lglut -lGLU -lGL -lX11 -lXmu -lXi -lm -L/usr/X11R6/lib -lgomp -lOpenThreads -lpthread
-MY_LIBS   = -lm -lrt $(XILINX_OTHER_LIB_BASE_PATH)/lib/libz.a
+# MY_LIBS   = -lm -lrt $(XILINX_OTHER_LIB_BASE_PATH)/lib/libz.a
+MY_LIBS = -lm -lrt -lz -lncurses
 
 # The pre-processor options used by the cpp (man cpp for more).
 CPPFLAGS  = 
@@ -98,7 +102,8 @@ CFLAGS  =
 # CXXFLAGS= -std=c++0x
 CXXFLAGS= 
 # The C program compiler.
-CC     = $(XILINX_BASE_PATH)/bin/arm-linux-gnueabihf-gcc
+#CC     = $(XILINX_BASE_PATH)/bin/arm-linux-gnueabihf-gcc
+CC=gcc
 
 # The C++ program compiler.
 CXX    = $(XILINX_BASE_PATH)/bin/arm-linux-gnueabihf-g++

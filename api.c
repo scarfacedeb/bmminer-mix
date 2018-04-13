@@ -2710,6 +2710,7 @@ static void poolstatus(struct io_data *io_data, __maybe_unused SOCKETTYPE c, __m
         root = api_add_diff(root, "Difficulty Rejected", &(pool->diff_rejected), false);
         root = api_add_diff(root, "Difficulty Stale", &(pool->diff_stale), false);
         root = api_add_diff(root, "Last Share Difficulty", &(pool->last_share_diff), false);
+	root = api_add_diff(root, "Work Difficulty", &(pool->cgminer_pool_stats.last_diff), false);
         root = api_add_bool(root, "Has Stratum", &(pool->has_stratum), false);
         root = api_add_bool(root, "Stratum Active", &(pool->stratum_active), false);
         if (pool->stratum_active)
@@ -3487,7 +3488,7 @@ static int itemstats(struct io_data *io_data, int i, char *id, struct cgminer_st
 
     root = api_add_mhs(root, "GHS av", &(ghs), false);
 
-    /*
+// HERE
     if (pool_stats) {
         root = api_add_uint32(root, "Pool Calls", &(pool_stats->getwork_calls), false);
         root = api_add_uint32(root, "Pool Attempts", &(pool_stats->getwork_attempts), false);
@@ -3510,7 +3511,7 @@ static int itemstats(struct io_data *io_data, int i, char *id, struct cgminer_st
         root = api_add_uint64(root, "Bytes Recv", &(pool_stats->bytes_received), false);
         root = api_add_uint64(root, "Net Bytes Sent", &(pool_stats->net_bytes_sent), false);
         root = api_add_uint64(root, "Net Bytes Recv", &(pool_stats->net_bytes_received), false);
-    }*/
+    }
 
     if (extra)
         root = api_add_extra(root, extra);
@@ -3615,6 +3616,13 @@ static void minerstats(struct io_data *io_data, __maybe_unused SOCKETTYPE c, __m
             sprintf(id, "%s%d", cgpu->drv->name, cgpu->device_id);
             i = itemstats(io_data, i, id, &(cgpu->cgminer_stats), NULL, extra, cgpu, isjson);
         }
+    }
+
+    for (j = 0; j < total_pools; j++) {
+        struct pool *pool = pools[j];
+
+        sprintf(id, "POOL%d", j);
+        i = itemstats(io_data, i, id, &(pool->cgminer_stats), &(pool->cgminer_pool_stats), NULL, NULL, isjson);
     }
 
     if (isjson && io_open)
